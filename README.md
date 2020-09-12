@@ -11,5 +11,5 @@ It is based on the Djando Tutorial project.
 
 [Requirements](../../wiki/Requirements)
 
-[Iteration]
-  [Iteration 1 Plan](../../wiki/Iteration 1 Plan)
+[Iteration](../../wiki/Iteration 1 Plan)
+
