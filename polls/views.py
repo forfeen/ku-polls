@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
+from django.contrib import messages
 from .models import Question, Choice
 
 
@@ -35,3 +36,12 @@ def vote(request, question_id):
         selected_choice.votes += 1
         selected_choice.save()
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+def allowed_vote(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if not question.can_vote():
+        messages.error(request, f"You are not allowed to vote this poll.")
+        return redirect('polls:index')
+        messages.success(request, "Your vote successfully recorded. Thank you.")
+        return redirect('polls:results')
+
