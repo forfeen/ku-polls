@@ -12,4 +12,5 @@ It is based on the Djando Tutorial project.
 [Requirements](../../wiki/Requirements)
 
 [Iteration 1 Plan](https://github.com/forfeen/ku-polls/wiki/Iteration-1-Plan)
+[Iteration 2 Plan](https://github.com/forfeen/ku-polls/wiki/Iteration-2-Plan)
 
