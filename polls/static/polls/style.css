@@ -7,3 +7,7 @@ div {
     text-align: center;
     font-size:  20;
 }
+
+table {
+    border-color: black;
+}

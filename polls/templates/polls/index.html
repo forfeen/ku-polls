@@ -6,8 +6,9 @@
     <p> Poll Question </p> 
     <ul>
     {% for question in latest_question_list %}
-        <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>    {% endfor %}
+        <br><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></br>    {% endfor %}
     </ul>
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
+</div>

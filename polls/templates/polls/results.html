@@ -1,12 +1,20 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
-
-<h1> {{ question.question_text }} </h1>
-<ul>
-    {% for choice in question.choice_set.all %}
-        <li> 
-            {{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize}}
-        </li>
-    {% endfor %}
+<div>
+<h2> {{ question.question_text }} </h2>
+<ul>    
+    <table>
+        <tr > 
+            <th> Question </th>
+            <th> Total vote </th>
+        </tr>
+        <tr> 
+            {% for choice in question.choice_set.all %}
+                <td> {{ choice.choice_text }}</td>
+                <td> {{ choice.votes }} </td>
+        </tr>
+        {% endfor %}
+    </table>
 </ul>
 <a href="{% url 'polls:index' %}"><input type ="submit" value="Back to List of Polls"></a>
+</div>
