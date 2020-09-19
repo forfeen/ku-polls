@@ -37,6 +37,33 @@ class QuestionModelTests(TestCase):
         old_question = Question(pub_date = time)
         self.assertIs(old_question.is_published, True)
 
+    def test_can_vote_before_pub_date(self):
+        pub_date = timezone.now() - datetime.timezone(days=1)
+        question_before = Question(pub_date = pub_date, end_date = timezone.now())
+        self.assertIs(question_before.can_vote(), False)
+
+    def test_can_vote_at_pub_date(self):
+        end_date = timezone.now() + datetime.timedelta(days=3)
+        question = Question(pub_date = timezone.now() , end_date = end_date)
+        self.assertIs(question.can_vote(), True)
+
+    def test_can_vote_between_pub_date_and_end_date(self):
+        pub_date = timezone.now() - datetime.timedelta(days=1)
+        end_date = timezone.now() + datetime.timedelta(days=5)
+        question = Question(pub_date = pub_date, end_date = end_date)
+        self.assertIs(question.can_vote(), True)
+
+    def test_can_vote_at_end_date(self):
+        pub_date = timezone.now() + datetime.timedelta(days=3)
+        question = Question(pub_date = pub_date, end_date = timezone.now())
+        self.assertIs(question.can_vote(), False)
+
+    def test_can_vote_after_end_date(self):
+        pub_date = timezone.now()
+        end_date = timezone.now() - datetime.timedelta(days=2)
+        question = Question(pub_date = pub_date, end_date = end_date)
+        self.assertIs(question.can_vote(), False)
+
 class QuestionIndexViewTests(TestCase):
 
     def test_no_question(self):
