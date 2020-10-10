@@ -5,16 +5,20 @@ python: "3.6"
 
 # don't clone more than necessary
 git:
-  depth: 1
+  depth: 0
 
 # Install any dependencies
 install:
   - pip3 install -r requirements.txt
+  - pip3 install codecov
+
     
 # script to run tests. Script can have many commands, one per line.
 script: 
-  - coverage -m unittest discover -p "*_test.py"
+  - coverage run manage.py test
 
 after_script:
   - bash <(curl -s https://codecov.io/bash)
 
+after_success:
+  - codecov
