@@ -1,5 +1,5 @@
 # Web Polls for Kasetsart Polls
-[![Build Status](https://travis-ci.com/github/forfeen/ku-polls)
+[![Build Status](https://travis-ci.com/forfeen/ku-polls.svg?branch=master)](https://travis-ci.com/forfeen/ku-polls)
 
 Polls application for [Individual Software Process](https://cpske.github.io/ISP) course at [Kasetsart University](https://ku.ac.th).
 
