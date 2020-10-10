@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 
 class Question(models.Model):
+    """ Create question model for polls app """
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
     end_date = models.DateTimeField('end date', default =  timezone.now() + datetime.timedelta(days=3))
@@ -25,6 +26,7 @@ class Question(models.Model):
     was_published_recently.short_description = 'Published recently?'
 
 class Choice(models.Model):
+    """ Create choice model for polls app """
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
