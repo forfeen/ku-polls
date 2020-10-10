@@ -13,5 +13,8 @@ install:
     
 # script to run tests. Script can have many commands, one per line.
 script: 
-  - python -m unittest discover -p "*_test.py"
-  
+  - coverage -m unittest discover -p "*_test.py"
+
+after_script:
+  - bash <(curl -s https://codecov.io/bash)
+
