@@ -1,4 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
@@ -27,8 +29,14 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
+# class EyesOnlyView(LoginRequiredMixin, ListView):
+#     login_url = '/accounts/login'
+
+
+@login_required(login_url='/accounts/login/')
 def vote(request, question_id):
     """ Vote the polls question """
+    user = request.user 
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
