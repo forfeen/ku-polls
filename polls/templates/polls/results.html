@@ -1,20 +1,40 @@
+<html>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
-<div>
-<h2> {{ question.question_text }} </h2>
-<ul>    
-    <table>
-        <tr > 
-            <th> Question </th>
-            <th> Total vote </th>
-        </tr>
-        <tr> 
-            {% for choice in question.choice_set.all %}
-                <td> {{ choice.choice_text }}</td>
-                <td> {{ choice.votes }} </td>
-        </tr>
-        {% endfor %}
-    </table>
-</ul>
-<a href="{% url 'polls:index' %}"><input type ="submit" value="Back to List of Polls"></a>
-</div>
+
+<body>
+    <div class="nav">
+        <div id="index">
+            <a href="{% url 'polls:index' %}"> Ku Polls </a>
+        </div>
+        <div id="button">
+            {% if user.is_authenticated %}
+            <!-- Welcome back, {{ user.username }} -->
+            <a href="{% url 'logout'%}?next={{request.path}}">Logout</a>
+            {% else %}
+            <a href="{% url 'login'%}?next={{request.path}}">Login</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="result-name">
+        {{ question.question_text }} 
+        <hr>
+        <ul>
+            <table>
+                <tr>
+                    <th> Question </th>
+                    <th> Total vote </th>
+                </tr>
+                <tr>
+                    {% for choice in question.choice_set.all %}
+                    <td> {{ choice.choice_text }}</td>
+                    <td> {{ choice.votes }} </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </ul>
+        <a href="{% url 'polls:index' %}"><input id="back-index" type="submit" value="Back to List of Polls"></a>
+    </div>
+</body>
+
+</html>

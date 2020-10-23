@@ -1,26 +1,48 @@
+<html>
 {% load static %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
-<div>
-<h2> {{ question.question_text }} </h2>
 
-{% if error_message %}
-<p>
-    <strong>
-        {{ error_message }}
-    </strong>>
-</p>  
-{% endif %}      
+<body>
+    <div class="nav">
+        <div id="index">
+            <a href="{% url 'polls:index' %}"> Ku Polls </a>
+        </div>
+        <div id="button">
+            {% if user.is_authenticated %}
+            <!-- Welcome back, {{ user.username }} -->
+            <a href="{% url 'logout'%}?next={{request.path}}">Logout</a>
+            {% else %}
+            <a href="{% url 'login'%}?next={{request.path}}">Login</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="poll">
+        {{ question.question_text }}
+        <hr>
+    
+    </div>
+    <div class="poll-choices">
 
-<form action= "{% url 'polls:vote' question.id %}" method="post">
-    {% csrf_token %}
-    {% for choice in question.choice_set.all %}
-        <br>
-        <input type = "radio" name = "choice" id = "choice{{ forloop.counter }}" value = "{{ choice.id }}">
-        <label for = "choice{{ forloop.counter }}"> {{ choice.choice_text }}</label><br>
-        <br>    
-    {% endfor %}
-    <input type="submit" value="Vote">
-</form>
-<a href="{% url 'polls:index' %}"><input type="submit" value="Back to List of Polls"></a>
-</div>
+        <form action="{% url 'polls:vote' question.id %}" method="post">
+            {% csrf_token %}
+            {% for choice in question.choice_set.all %}
+            <br>
+
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+            <label for="choice{{ forloop.counter }}"> {{ choice.choice_text }}</label><br>
+            <br>
+    
+            {% endfor %}            
+            <div id="error-msg">
+                {% if error_message %}
+                        {{ error_message }}    <br>
+                {% endif %}
+                <input id="vote-button" type="submit" value="Vote">   Vote 
+            </div>
+        </form>
+        <a href="{% url 'polls:index' %}"><input id="submit-button" type="submit" value="Back to List of Polls"></a>
+
+</body>
+
+</html>

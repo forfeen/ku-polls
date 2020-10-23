@@ -1,20 +1,28 @@
 <html>
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 
 <body>
-    <h2>Login</h2>
-    <form method="POST">
-        {% csrf_token %}
-        <table style="padding: 2ex;">
-            {{ form.as_table }}
-        </table>
-        <button type="submit">Login</button>
-        <!-- if your app redirects user to login before accessing some pages, then next contains return url -->
-        <input type="hidden" name="next" value="{{next}}" />
-    </form>
-    {# If you have written a password_reset template, then add #}
-    <p>
-        <a href="{% url 'password_reset' %}">Forgot password?</a>
-    </p>
+    <div class="nav">
+        <div id="index">
+            <a href="{% url 'polls:index' %}"> Ku Polls </a>
+        </div>
+
+    </div>
+    <div class="login">
+        Login
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" id="submit-login" >Login</button>           
+            <input type="hidden"  name="next" value="{{next}}" />
+        </form>
+        {# If you have written a password_reset template, then add #}
+        <p id="forget">
+            <br><br><a href="{% url 'password_reset' %}">Forgot password?</a>
+        </p>
+    </div>
 </body>
 
 </html>

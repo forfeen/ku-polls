@@ -76,9 +76,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'kupollsapp.wsgi.application'
-# LOGIN_REDIRECT_URL = '/todo/'
-# LOGOUT_REDIRECT_URL = 'some-existing-view`
-
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

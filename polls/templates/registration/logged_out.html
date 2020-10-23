@@ -1,10 +1,21 @@
 <html>
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+
 
 <body>
-    <h2>Logged out</h2>
-    <p>
-        Want something todo?
-        <a href="{% url 'login'%}">Login again</a>
+    <div class="nav">
+        <div id="index">
+            <a href="{% url 'polls:index' %}"> Ku Polls </a>
+        </div>
+
+    </div>
+    <div class="logout">
+        Logged out
+        <p>
+            <a href="{% url 'login'%}">Login again</a>
+    </div>
 </body>
 
 </html>
