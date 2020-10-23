@@ -92,7 +92,6 @@ a:active {
     position: absolute;
     width: 1000px;
     height: 94px;
-    /* left: 525px; */
     top: 350px;
 
     /* font-family: Roboto; */
@@ -170,7 +169,7 @@ a:active {
     width: 140px;
     height: 49px;
     left: 450px;
-    top: 450px;
+    top: 480px;
     background: whitesmoke;
     border: 1px solid #000000;
     border-radius: 10px;

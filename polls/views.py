@@ -8,6 +8,8 @@ from django.views import generic
 from django.contrib import messages
 from .models import Question, Choice
 
+previous_choice = []
+
 class IndexView(generic.ListView):
     """ Show a list of polls """
     template_name = 'polls/index.html'
@@ -32,7 +34,6 @@ class ResultsView(generic.DetailView):
 @login_required(login_url='/accounts/login/')
 def vote(request, question_id):
     """ Vote the polls question """
-    user = request.user 
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
@@ -42,8 +43,36 @@ def vote(request, question_id):
             'error_message' : "Please select a choice.",
         })
     else:
-        selected_choice.votes += 1
-        selected_choice.save()
+        if len(previous_choice) >= 1:
+            if len(previous_choice) == 2 :
+                if selected_choice == previous_choice[0] == previous_choice[1] :
+                    selected_choice.votes += 1
+                    previous_choice.pop(0)
+                    print(len(previous_choice))
+                    previous_choice.append(selected_choice)
+                    print(len(previous_choice))
+                    selected_choice.save()    
+            elif selected_choice == previous_choice[0] :
+                previous_choice.append(selected_choice)
+                return render(request, 'polls/detail.html', {
+                    'question' : question,
+                    'error_message' : f"You selected '{selected_choice}' already !  Click 'Vote' to vote again",
+                })
+        # elif len(previous_choice) > 1:
+        #     if selected_choice == previous_choice[0] == previous_choice[1]:
+        #         selected_choice.votes += 1
+        #         previous_choice.clear()
+        #         previous_choice.append(selected_choice)
+        #         selected_choice.save()
+        #     else: 
+        #         selected_choice.votes += 1
+        #         previous_choice.pop(0)
+        #         previous_choice.append(selected_choice)
+        #         selected_choice.save()
+        else:
+            selected_choice.votes += 1
+            previous_choice.append(selected_choice)
+            selected_choice.save()
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 def allowed_vote(request, question_id):
@@ -54,4 +83,3 @@ def allowed_vote(request, question_id):
         return redirect('polls:index')
         messages.success(request, "Your vote successfully recorded. Thank you.")
         return redirect('polls:results')
-
