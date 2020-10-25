@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.views import generic
 from django.contrib import messages
 from .models import Question, Choice
+import logging
 
 previous_choice = []
 
@@ -34,10 +35,16 @@ class ResultsView(generic.DetailView):
 @login_required(login_url='/accounts/login/')
 def vote(request, question_id):
     """ Vote the polls question """
+    user = request.user
+    print("current user is", user.id, "login", user.username)
+    print("Real name:", user.first_name, user.last_name)
+
     question = get_object_or_404(Question, pk=question_id)
     try:
+        configure()
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
+        configure()
         return render(request, 'polls/detail.html', {
             'question' : question,
             'error_message' : "Please select a choice.",
@@ -46,11 +53,10 @@ def vote(request, question_id):
         if len(previous_choice) >= 1:
             if len(previous_choice) == 2 :
                 if selected_choice == previous_choice[0] == previous_choice[1] :
+                    configure()
                     selected_choice.votes += 1
                     previous_choice.pop(0)
-                    print(len(previous_choice))
                     previous_choice.append(selected_choice)
-                    print(len(previous_choice))
                     selected_choice.save()    
             elif selected_choice == previous_choice[0] :
                 previous_choice.append(selected_choice)
@@ -58,22 +64,27 @@ def vote(request, question_id):
                     'question' : question,
                     'error_message' : f"You selected '{selected_choice}' already !  Click 'Vote' to vote again",
                 })
-        # elif len(previous_choice) > 1:
-        #     if selected_choice == previous_choice[0] == previous_choice[1]:
-        #         selected_choice.votes += 1
-        #         previous_choice.clear()
-        #         previous_choice.append(selected_choice)
-        #         selected_choice.save()
-        #     else: 
-        #         selected_choice.votes += 1
-        #         previous_choice.pop(0)
-        #         previous_choice.append(selected_choice)
-        #         selected_choice.save()
         else:
+            configure()
             selected_choice.votes += 1
             previous_choice.append(selected_choice)
             selected_choice.save()
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+def configure():
+    """ Configure loggers and log handlers """
+    filehandler = logging.FileHandler("demo.log")
+    filehandler.setLevel(logging.NOTSET)
+    formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s: %(message)s')
+    filehandler.setFormatter(formatter)
+    root = logging.getLogger()
+    root.addHandler(filehandler)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.WARNING)
+    formatter = logging.Formatter(fmt='%(levelname)-8s %(name)s: %(message)s')
+    console_handler.setFormatter(formatter)
+    root.addHandler(console_handler)
+
 
 def allowed_vote(request, question_id):
     """ return result if the vote was success """
